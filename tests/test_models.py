@@ -100,6 +100,11 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(Decimal(new_product.price), product.price)
         self.assertEqual(new_product.available, product.available)
         self.assertEqual(new_product.category, product.category)
+        # create a new Product with non-boolean value passed on Available
+        product = ProductFactory()
+        product.id = None
+        product.available = "non-boolean"
+        self.assertRaises(DataValidationError, product.create)
 
     #
     # ADD YOUR TEST CASES HERE
@@ -137,6 +142,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(products[0].description, "testing")
         #add a second product and try to update it
         product = ProductFactory()
+        product.id = None
         self.assertRaises(DataValidationError, product.update)
 
     def test_delete_a_product(self):
