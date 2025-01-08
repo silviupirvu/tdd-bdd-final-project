@@ -21,8 +21,8 @@ Test cases can be run with:
 
 While debugging just these tests it's convenient to use this:
     nosetests --stop tests/test_models.py:TestProductModel
-
 """
+
 import os
 import logging
 import unittest
@@ -208,4 +208,13 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found.count(), count)
         for product in found:
             self.assertEqual(product.price, price)
-lize)
+
+
+    def test_from_dictionary(self):
+        """test exceptions from dictionary"""
+        # create a new Product with non-boolean value passed on Available
+        product = Product(name="Fedora", description="A red hat", price=12.50, available="not-boolean", category=Category.CLOTHS)
+        product_is_available = product.available
+        print(f"product1 = {product_is_available}")
+        # self.assertRaises(DataValidationError)
+        self.assertNotEqual(product_is_available, True)
