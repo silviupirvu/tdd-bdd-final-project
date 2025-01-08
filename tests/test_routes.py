@@ -172,6 +172,7 @@ class TestProductRoutes(TestCase):
         data = response.get_json()
         self.assertIn("was not found", data["message"])
 
+
 ######################################################################
 # UPDATE AN EXISTING PRODUCT
 ######################################################################
@@ -183,16 +184,17 @@ def update_products(product_id):
     This endpoint will update a Product based the body that is posted
     """
     app.logger.info("Request to Update a product with id [%s]", product_id)
-    check_content_type("application/json")
+    os.check_content_type("application/json")
 
     product = Product.find(product_id)
     if not product:
-        abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
+        os.abort(status.HTTP_404_NOT_FOUND, f"Product with id '{product_id}' was not found.")
 
-    product.deserialize(request.get_json())
+    product.deserialize(os.request.get_json())
     product.id = product_id
     product.update()
     return product.serialize(), status.HTTP_200_OK
+
 
 ######################################################################
 # DELETE A PRODUCT
@@ -212,6 +214,7 @@ def delete_products(product_id):
 
     return "", status.HTTP_204_NO_CONTENT
 
+
 ######################################################################
 # LIST PRODUCTS
 ######################################################################
@@ -221,9 +224,9 @@ def list_products():
     app.logger.info("Request to list Products...")
 
     products = []
-    name = request.args.get("name")
-    category = request.args.get("category")
-    available = request.args.get("available")
+    name = os.request.args.get("name")
+    category = os.request.args.get("category")
+    available = os.request.args.get("available")
 
     if name:
         app.logger.info("Find by name: %s", name)
@@ -231,7 +234,7 @@ def list_products():
     elif category:
         app.logger.info("Find by category: %s", category)
         # create enum from string
-        category_value = getattr(Category, category.upper())
+        category_value = getattr(category, category.upper())
         products = Product.find_by_category(category_value)
     elif available:
         app.logger.info("Find by available: %s", available)
